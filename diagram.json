@@ -7,14 +7,14 @@
       "type": "board-esp32-s3-devkitc-1",
       "id": "esp",
       "top": 0,
-      "left": 0,
+      "left": 320,
       "attrs": {}
     },
     {
       "type": "chip-energy-meter",
       "id": "meter",
-      "top": -60,
-      "left": 240,
+      "top": 20,
+      "left": 160,
       "attrs": {
         "voltage": "230",
         "current": "52",
@@ -25,42 +25,42 @@
     {
       "type": "board-ssd1306",
       "id": "oled",
-      "top": 100,
-      "left": 250,
+      "top": 190,
+      "left": 0,
       "attrs": { "i2cAddress": "0x3c" }
-    },
-    {
-      "type": "wokwi-led",
-      "id": "led1",
-      "top": -80,
-      "left": 100,
-      "attrs": { "color": "green" }
     },
     {
       "type": "wokwi-resistor",
       "id": "r1",
-      "top": -30,
-      "left": 100,
+      "top": 40,
+      "left": 470,
       "attrs": { "value": "220" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": 40,
+      "left": 560,
+      "attrs": { "color": "green" }
     }
   ],
   "connections": [
     ["esp:TX", "$serialMonitor:RX", "", []],
     ["esp:RX", "$serialMonitor:TX", "", []],
 
-    ["meter:VCC", "esp:3V3.1", "red", ["v0"]],
-    ["meter:GND", "esp:GND.1", "black", ["v0"]],
-    ["esp:17", "meter:RX", "green", ["v0"]],
-    ["esp:18", "meter:TX", "blue", ["v0"]],
+    ["meter:VCC", "esp:3V3.1", "red", []],
+    ["meter:GND", "esp:GND.1", "black", []],
+    ["esp:17", "meter:RX", "green", []],
+    ["esp:18", "meter:TX", "blue", []],
 
-    ["oled:VCC", "esp:3V3.1", "red", ["v0"]],
-    ["oled:GND", "esp:GND.2", "black", ["v0"]],
-    ["oled:SDA", "esp:8", "purple", ["v0"]],
-    ["oled:SCL", "esp:9", "orange", ["v0"]],
+    ["oled:VCC", "esp:3V3.2", "red", []],
+    ["oled:GND", "esp:GND.1", "black", []],
+    ["oled:SDA", "esp:8", "purple", []],
+    ["oled:SCL", "esp:9", "orange", []],
 
-    ["esp:2", "r1:1", "yellow", ["v0"]],
-    ["r1:2", "led1:A", "yellow", ["v0"]],
-    ["led1:C", "esp:GND.3", "black", ["v0"]]
+    ["esp:2", "r1:1", "yellow", []],
+    ["r1:2", "led1:A", "yellow", []],
+    ["led1:C", "esp:GND.3", "black", []]
   ],
   "dependencies": {}
 }
