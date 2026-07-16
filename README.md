@@ -62,6 +62,15 @@ the network — a wedged broker drops samples instead of stalling the bus.
 | 5 | Power factor | ×100 |
 | 6–7 | Active energy | Wh (u32) |
 
+## The gateway under load, and under failure
+
+| Healthy, heavy load | Meter stops answering |
+|---|---|
+| ![260 V at 60 A decoding to 14820 W](docs/shots/heavy-load.png) | ![OLED showing LINK DOWN](docs/shots/meter-down.png) |
+| 260.0 V x 60.0 A x 0.95 = **14820 W**, exactly. Energy integrating, `err:0`. | `faultMode 1` — the meter goes silent. The gateway reports `LINK DOWN` and counts errors rather than freezing or showing a stale reading. |
+
+Both captured headless with `wokwi-cli --screenshot-part`, no GUI involved.
+
 ## Fault injection
 
 The chip's `faultMode` control drives the failure paths:

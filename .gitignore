@@ -5,3 +5,6 @@
 
 # Fetched automatically by `wokwi-cli chip compile`
 chips/wokwi-api.h
+
+# Diagram variants generated for screenshots
+docs/shots/_*.json
