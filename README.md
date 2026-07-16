@@ -20,6 +20,12 @@ be told to fail on demand, which is what makes the CI meaningful.
 *Live from the simulator: 230.0 V x 5.2 A decoded to 1136 W, energy integrating,
 link healthy. Captured headless with `wokwi-cli --screenshot-part`.*
 
+![Full simulation running in Wokwi](docs/simulator.png)
+
+*The whole loop under load. The meter chip's sliders are pushed to 260 V and
+60.0 A; the OLED reads 14820 W, which is 260.0 x 60.0 x 0.95 exactly. 105 polls
+in, zero retries, publishing 111-byte payloads to the broker.*
+
 ## Why this exists
 
 Field gateways fail on the boring paths: a slave goes quiet, a frame arrives
