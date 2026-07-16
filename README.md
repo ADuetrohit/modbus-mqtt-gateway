@@ -1,7 +1,14 @@
 # Modbus RTU → MQTT industrial edge gateway
 
+[![CI](https://github.com/ADuetrohit/modbus-mqtt-gateway/actions/workflows/ci.yml/badge.svg)](https://github.com/ADuetrohit/modbus-mqtt-gateway/actions/workflows/ci.yml)
+
 An ESP32-S3 gateway that polls an AC energy meter over Modbus RTU and republishes
 telemetry to MQTT — simulated end to end in Wokwi, and tested on every push.
+
+That badge is not a build check. It means the firmware was flashed into a
+simulated ESP32-S3, spoke Modbus to a simulated meter, survived that meter being
+driven into failure, and published to a real broker — on GitHub's runners, on
+this commit.
 
 The meter is not a stock part. It is a **custom Wokwi chip written in C** that
 speaks real Modbus RTU: CRC-16/MODBUS, t3.5 inter-frame framing, exception
