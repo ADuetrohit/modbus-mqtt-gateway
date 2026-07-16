@@ -1,0 +1,10 @@
+[wokwi]
+version = 1
+firmware = '.pio/build/esp32-s3-devkitc-1/firmware.bin'
+elf = '.pio/build/esp32-s3-devkitc-1/firmware.elf'
+
+# The .wasm is built by `wokwi-cli chip compile`; its .chip.json descriptor
+# must sit next to it under the same base name.
+[[chip]]
+name = 'energy-meter'
+binary = 'chips/energy-meter.chip.wasm'

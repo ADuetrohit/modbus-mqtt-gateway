@@ -1,0 +1,40 @@
+name: Gateway survives a misbehaving meter
+version: 1
+author: Rohit R. Nalbuga
+
+# This is the test that earns the custom chip. A real meter cannot be told to
+# go silent or to corrupt its CRC on demand; a simulated one can, on every push.
+
+steps:
+  - wait-serial: "METER OK seq=1"
+
+  # Meter stops answering: the master must exhaust retries and report a timeout
+  # rather than hang the poll loop or trip the watchdog.
+  - set-control:
+      part-id: meter
+      control: faultMode
+      value: 1
+  - wait-serial: "METER FAIL reason=TIMEOUT"
+
+  # Meter answers, but with a corrupted checksum. Rejecting it is the whole
+  # point of CRC; accepting it would silently publish garbage.
+  - set-control:
+      part-id: meter
+      control: faultMode
+      value: 2
+  - wait-serial: "METER FAIL reason=CRC_ERROR"
+
+  # Recovery: no reboot, no manual intervention, polling just resumes.
+  - set-control:
+      part-id: meter
+      control: faultMode
+      value: 0
+  - wait-serial: "METER OK"
+
+  # Load change must flow through to a new decoded power reading.
+  # 230.0 V x 30.0 A x 0.95 PF = 6555 W.
+  - set-control:
+      part-id: meter
+      control: current
+      value: 300
+  - wait-serial: "I=30.0 P=6555"

@@ -1,0 +1,31 @@
+{
+  "name": "energy-meter",
+  "author": "Rohit R. Nalbuga",
+  "pins": ["VCC", "GND", "RX", "TX"],
+  "controls": [
+    {
+      "id": "voltage",
+      "label": "Line voltage (V)",
+      "type": "range",
+      "min": 180,
+      "max": 260,
+      "step": 1
+    },
+    {
+      "id": "current",
+      "label": "Load current (0.1 A)",
+      "type": "range",
+      "min": 0,
+      "max": 600,
+      "step": 1
+    },
+    {
+      "id": "faultMode",
+      "label": "Fault: 0=ok 1=silent 2=bad CRC",
+      "type": "range",
+      "min": 0,
+      "max": 2,
+      "step": 1
+    }
+  ]
+}

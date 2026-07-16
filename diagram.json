@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "author": "Rohit R. Nalbuga",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-esp32-s3-devkitc-1",
+      "id": "esp",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "chip-energy-meter",
+      "id": "meter",
+      "top": -60,
+      "left": 240,
+      "attrs": {
+        "voltage": "230",
+        "current": "52",
+        "faultMode": "0",
+        "slaveAddress": "1"
+      }
+    },
+    {
+      "type": "board-ssd1306",
+      "id": "oled",
+      "top": 100,
+      "left": 250,
+      "attrs": { "i2cAddress": "0x3c" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": -80,
+      "left": 100,
+      "attrs": { "color": "green" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": -30,
+      "left": 100,
+      "attrs": { "value": "220" }
+    }
+  ],
+  "connections": [
+    ["esp:TX", "$serialMonitor:RX", "", []],
+    ["esp:RX", "$serialMonitor:TX", "", []],
+
+    ["meter:VCC", "esp:3V3.1", "red", ["v0"]],
+    ["meter:GND", "esp:GND.1", "black", ["v0"]],
+    ["esp:17", "meter:RX", "green", ["v0"]],
+    ["esp:18", "meter:TX", "blue", ["v0"]],
+
+    ["oled:VCC", "esp:3V3.1", "red", ["v0"]],
+    ["oled:GND", "esp:GND.2", "black", ["v0"]],
+    ["oled:SDA", "esp:8", "purple", ["v0"]],
+    ["oled:SCL", "esp:9", "orange", ["v0"]],
+
+    ["esp:2", "r1:1", "yellow", ["v0"]],
+    ["r1:2", "led1:A", "yellow", ["v0"]],
+    ["led1:C", "esp:GND.3", "black", ["v0"]]
+  ],
+  "dependencies": {}
+}

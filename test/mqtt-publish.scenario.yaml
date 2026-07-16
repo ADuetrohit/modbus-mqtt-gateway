@@ -1,0 +1,16 @@
+name: Telemetry reaches the broker
+version: 1
+author: Rohit R. Nalbuga
+
+# Wokwi's simulated Wi-Fi reaches the real internet from the CLI, not just the
+# browser, so the cloud leg is testable headless too.
+#
+# These four lines are strictly ordered from boot, which is why they live in
+# their own scenario: their timing relative to the meter poll loop drifts run
+# to run, and interleaving the two sets of assertions would be flaky.
+
+steps:
+  - wait-serial: "BOOT modbus-mqtt-gateway"
+  - wait-serial: "WIFI OK ip="
+  - wait-serial: "MQTT OK"
+  - wait-serial: "PUB rnalbuga/gateway/meter1/telemetry"

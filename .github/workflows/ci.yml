@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  simulate:
+    name: Build and simulate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Cache PlatformIO
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.platformio
+            ~/.cache/pip
+          key: pio-${{ runner.os }}-${{ hashFiles('platformio.ini') }}
+
+      - name: Install PlatformIO
+        run: pip install --upgrade platformio
+
+      - name: Install Wokwi CLI
+        run: |
+          curl -L https://wokwi.com/ci/install.sh | sh
+          # The installer's target directory is not documented and has moved
+          # before; resolve it instead of hardcoding a path.
+          cli="$(command -v wokwi-cli || find "$HOME" /usr/local/bin -name 'wokwi-cli' -type f 2>/dev/null | head -n1)"
+          if [ -z "$cli" ]; then
+            echo "wokwi-cli not found after install" >&2
+            exit 1
+          fi
+          echo "Found wokwi-cli at $cli"
+          echo "$(dirname "$cli")" >> "$GITHUB_PATH"
+
+      - name: Compile custom chip to WASM
+        run: |
+          wokwi-cli chip compile chips/energy-meter.chip.c \
+            -o chips/energy-meter.chip.wasm
+
+      - name: Build firmware
+        run: pio run
+
+      - name: Simulate — meter polling
+        uses: wokwi/wokwi-ci-action@v1
+        with:
+          token: ${{ secrets.WOKWI_CLI_TOKEN }}
+          path: /
+          timeout: 60000
+          scenario: test/meter-poll.scenario.yaml
+          fail_text: 'METER FAIL'
+
+      - name: Simulate — fault injection and recovery
+        uses: wokwi/wokwi-ci-action@v1
+        with:
+          token: ${{ secrets.WOKWI_CLI_TOKEN }}
+          path: /
+          timeout: 90000
+          scenario: test/fault-injection.scenario.yaml
+
+      - name: Simulate — telemetry reaches the broker
+        uses: wokwi/wokwi-ci-action@v1
+        with:
+          token: ${{ secrets.WOKWI_CLI_TOKEN }}
+          path: /
+          timeout: 60000
+          scenario: test/mqtt-publish.scenario.yaml

@@ -1,0 +1,18 @@
+name: Meter polls and decodes correctly
+version: 1
+author: Rohit R. Nalbuga
+
+steps:
+  - wait-serial: "BOOT modbus-mqtt-gateway"
+  - wait-serial: "OLED OK"
+
+  # Full round trip: the gateway frames a Modbus request, the custom chip
+  # parses it, answers with real registers, and the decode lands exactly.
+  # 230.0 V x 5.2 A x 0.95 PF = 1136 W, computed in integer maths on both ends.
+  - wait-serial: "METER OK seq=1 V=230.0 I=5.2 P=1136"
+
+  # Second poll proves the 1 s cadence and that framing resynchronises.
+  - wait-serial: "METER OK seq=2 V=230.0 I=5.2 P=1136"
+
+  # Energy is integrated by the chip's own timer, so it must be climbing.
+  - wait-serial: "METER OK seq=5"

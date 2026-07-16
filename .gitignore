@@ -1,0 +1,7 @@
+.pio/
+.vscode/
+*.wasm
+*.vcd
+
+# Fetched automatically by `wokwi-cli chip compile`
+chips/wokwi-api.h
